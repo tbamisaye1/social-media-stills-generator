@@ -1,0 +1,35 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Env / secrets
+.env
+.env.local
+*.pem
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Data (keep folders, ignore heavy media)
+data/input/**
+data/output/**
+!data/input/.gitkeep
+!data/output/.gitkeep
+data/samples/**
+!data/samples/.gitkeep
+!data/samples/README.md
+
+# Notebooks / local experiments
+.ipynb_checkpoints/
+*.log

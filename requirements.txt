@@ -1,0 +1,9 @@
+# Add packages as you use them. Suggested starting set (uncomment when ready):
+# python-dotenv
+# pillow
+# opencv-python-headless
+# numpy
+# openai
+# pydantic
+# rich
+# pytest
