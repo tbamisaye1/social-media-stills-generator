@@ -6,6 +6,10 @@ import os
 import dotenv
 dotenv.load_dotenv()
 output_dir = os.getenv("OUTPUT_DIR")
+import shutil
+
+
+
 # conditional nodes
 
 
@@ -16,13 +20,13 @@ def conditional_node(state: AgentState) -> AgentState:
 
 
 
-from agents.nodes import load_images, classify_image, get_next_image
+from agents.nodes import load_images, classify_image, get_next_image, save_images
 graph = StateGraph(AgentState)
 graph.add_node("load_images", load_images)
 graph.add_node("classify_image", classify_image)
 graph.add_node("get_next_image", get_next_image)
 graph.add_node("conditional_node", conditional_node)
-
+graph.add_node("save_images", save_images)
 
 # Conditional edge router
 
@@ -36,18 +40,18 @@ graph.add_edge(START, "load_images")
 graph.add_edge("load_images", "conditional_node") #where our ReACT loop starts
 graph.add_conditional_edges("conditional_node", conditional_edge_router, {
     "classify_image": "classify_image",
-    "end": END,
+    "end": "save_images",
 })
 graph.add_edge("classify_image", "get_next_image")
 graph.add_edge("get_next_image", "conditional_node")
-
+graph.add_edge("save_images", END)
 
 app = graph.compile()
 
 final_State = app.invoke({"current_image_index": 0, "current_image": None, "images": [], "results": []})
-print("================================================")
-print(f"Final state: {final_State}", "\n")
-print("================================================")
+# print("================================================")
+# print(f"Final state: {final_State}", "\n")
+# print("================================================")
 
 # Process output into a file
 output_file = os.path.join(output_dir, "results.json")
@@ -57,8 +61,17 @@ json_results = [{
     "verdict": result["result"].verdict,
     "description": result["result"].description
 } for result in final_State["results"]]
+
+
+successes = [{
+    "image" : result["image"],
+    "image_index" : result["image_index"],
+    "verdict": result["result"].verdict,
+    "description": result["result"].description
+} for result in final_State["results"] if result["result"].verdict == "keep"]
     
     
 
 with open(output_file, "w") as f:
     json.dump(json_results, f,indent=3)
+    

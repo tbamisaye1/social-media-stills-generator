@@ -12,7 +12,10 @@ from agents.response_schemas import Model_Response
 from pipeline.state import ImageResult
 load_dotenv()
 from tools.image_tools import image_path_to_base64
-
+import shutil
+from dotenv import load_dotenv
+load_dotenv()
+output_dir = os.getenv("OUTPUT_DIR")
 
 def load_images(state: AgentState) -> AgentState:
     """Load the images from the input directory"""
@@ -52,4 +55,13 @@ def get_next_image(state: AgentState) -> AgentState:
         if state["current_image_index"] >= len(state["images"]):
             return state
         state["current_image"] = state["images"][state["current_image_index"]]
+    return state
+
+
+
+def save_images(state: AgentState) -> AgentState:
+    """Save the images classified as keep to the output directory"""
+    for result in state["results"]:
+        if result["result"].verdict == "keep":
+            shutil.copy(result["image"], output_dir)
     return state
