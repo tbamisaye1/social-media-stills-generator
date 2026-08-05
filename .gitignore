@@ -30,6 +30,9 @@ data/samples/**
 !data/samples/.gitkeep
 !data/samples/README.md
 
+# Calibration packs (third-party photos — local use only, do not publish)
+data/calibration/**
+
 # Notebooks / local experiments
 .ipynb_checkpoints/
 *.log

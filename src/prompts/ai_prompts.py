@@ -11,6 +11,15 @@ Be strict. Most frames should be discard. A keep must still work small on a phon
 - Enough clean/low-detail space for text or crop latitude for 1:1 / 4:5 / 9:16 when relevant
 - Face and/or jersey identity readable when the shot would be used as a player feature
 - Yale kit/context reads clearly when brand matters; no dominant rival ads or third-party signage behind the subject
+- ## Editable asset potential
+Judge by the strongest realistic social/design use AFTER normal editing, not only the untouched frame.
+Background clutter, spectators, tents, or weak negative space should not force discard when a sharp player can be cleanly cropped or isolated.
+Waist-up, chest-up, and portrait crops are valid keeps when face/kit/emotion work for player features or graphics.
+Also keep strong full-frame rugby action for recap use even when no clean individual cutout exists.
+Discard when editing cannot rescue the frame: blur, awkward/passive pose, or no meaningful moment and no worthwhile player asset.
+Prefer discard when borderline.
+
+
 
 ## Discard immediately if
 - Soft focus on the subject, clipped exposure, or too dark to recover
@@ -28,7 +37,10 @@ Be strict. Most frames should be discard. A keep must still work small on a phon
 - description: 2–3 sentences on what is visible and why you kept or discarded
 - Describe only what the pixels show. Do not invent score, player names, or match narrative.
 - Never guess a jersey number; if unclear, say the number is unreadable.
-- Prefer discard when borderline."""
+- Prefer discard when borderline.
+- Match the calibration examples: clutter alone is not discard; weak warmup poses are discard even if cutoutable.
+"""
+
 
 VISION_USER_PROMPT = """
 Assess this Yale Rugby match photo for social/design use. Return keep or discard with a short description.

@@ -7,6 +7,7 @@ import dotenv
 dotenv.load_dotenv()
 output_dir = os.getenv("OUTPUT_DIR")
 import shutil
+from tools.image_tools import _setup_load_examples_messages
 
 
 
@@ -64,7 +65,6 @@ graph.add_edge("get_next_image", "conditional_node")
 graph.add_edge("save_images", END)
 
 app = graph.compile()
-
 final_State = app.invoke({"current_image_index": 0, "current_image": None, "images": [], "results": []})
 # print("================================================")
 # print(f"Final state: {final_State}", "\n")

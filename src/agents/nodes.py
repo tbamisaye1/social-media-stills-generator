@@ -14,8 +14,17 @@ load_dotenv()
 from tools.image_tools import image_path_to_base64
 import shutil
 from dotenv import load_dotenv
+import json
+from pathlib import Path
 load_dotenv()
 output_dir = os.getenv("OUTPUT_DIR")
+from tools.image_tools import _setup_load_examples_messages
+Few_shot_folder = Path("data/calibration/few_shot/")
+FEW_SHOT_LABELS = Few_shot_folder / "labels.json"
+FEW_SHOT_IMAGES = Few_shot_folder / "images"
+few_shot_examples_history = _setup_load_examples_messages() 
+
+
 
 def load_images(state: AgentState) -> AgentState:
     """Load the images from the input directory"""
@@ -37,10 +46,17 @@ def classify_image(state: AgentState) -> AgentState:
     converted_image = image_path_to_base64(image)
     vision_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     structured_vision_llm = vision_llm.with_structured_output(Model_Response)
-    result = structured_vision_llm.invoke([SystemMessage(VISION_SYSTEM_PROMPT),
-                    HumanMessage(content=[ {"type": "text", "text": VISION_USER_PROMPT},
+    
+    
+    
+    # Few shot exmpales:
+
+    full_messages = few_shot_examples_history + [
+        HumanMessage(content=[ {"type": "text", "text": VISION_USER_PROMPT},
                     {"type": "image_url", "image_url": {"url": converted_image}} ])
-                    ])
+    ]
+    result = structured_vision_llm.invoke([SystemMessage(VISION_SYSTEM_PROMPT)] + 
+                    full_messages)
     formatted_ai_result = Model_Response(verdict=result.verdict, description=result.description)
     state["results"].append(ImageResult(image=image, result=formatted_ai_result, image_index=state["current_image_index"]))
     # To be built out later
