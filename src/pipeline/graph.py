@@ -20,6 +20,7 @@ def conditional_node(state: AgentState) -> AgentState:
 
 
 
+
 from agents.nodes import load_images, classify_image, get_next_image, save_images
 graph = StateGraph(AgentState)
 graph.add_node("load_images", load_images)
@@ -27,7 +28,7 @@ graph.add_node("classify_image", classify_image)
 graph.add_node("get_next_image", get_next_image)
 graph.add_node("conditional_node", conditional_node)
 graph.add_node("save_images", save_images)
-
+# graph.add_node("conditional_empty_images", conditional_empty_images)
 # Conditional edge router
 
 def conditional_edge_router(state: AgentState) -> str:
@@ -35,8 +36,24 @@ def conditional_edge_router(state: AgentState) -> str:
         return "classify_image"
     else:
         return "end"
+    
+    
+    
+def conditional_empty_images_router(state: AgentState) -> AgentState:
+    input_dir = os.getenv("INPUT_DIR")
+    images = os.listdir(input_dir)
+    images = [image for image in images if  image.lower().endswith((".jpg", ".jpeg", ".png"))]
+    
+    if len(images) == 0:
+        return "end"
+    else:
+        return "load_images"
+
 # Define edeges
-graph.add_edge(START, "load_images")
+graph.add_conditional_edges(START, conditional_empty_images_router, {
+    "end": END,
+    "load_images": "load_images",
+})
 graph.add_edge("load_images", "conditional_node") #where our ReACT loop starts
 graph.add_conditional_edges("conditional_node", conditional_edge_router, {
     "classify_image": "classify_image",
