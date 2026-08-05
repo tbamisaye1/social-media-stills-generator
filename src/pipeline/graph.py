@@ -1,6 +1,11 @@
 """Define the graph for our agent"""
 from langgraph.graph import StateGraph, START, END
 from pipeline.state import AgentState
+import json
+import os
+import dotenv
+dotenv.load_dotenv()
+output_dir = os.getenv("OUTPUT_DIR")
 # conditional nodes
 
 
@@ -43,3 +48,17 @@ final_State = app.invoke({"current_image_index": 0, "current_image": None, "imag
 print("================================================")
 print(f"Final state: {final_State}", "\n")
 print("================================================")
+
+# Process output into a file
+output_file = os.path.join(output_dir, "results.json")
+json_results = [{
+    "image" : result["image"],
+    "image_index" : result["image_index"],
+    "verdict": result["result"].verdict,
+    "description": result["result"].description
+} for result in final_State["results"]]
+    
+    
+
+with open(output_file, "w") as f:
+    json.dump(json_results, f,indent=3)

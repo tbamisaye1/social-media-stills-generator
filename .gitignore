@@ -33,3 +33,7 @@ data/samples/**
 # Notebooks / local experiments
 .ipynb_checkpoints/
 *.log
+
+data/output/results.json
+data/output/
+*.json
